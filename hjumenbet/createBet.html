@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HJUMENbet • Create a bet</title>
+        <link rel="icon" type="image/x-icon" href="\hjumenbet_icon.ico">
+    </head>
+    <body>
+        <main>
+            <h1>Create a bet</h1>
+            <div>
+                <h2>Bet name</h2>
+                <input type="text" placeholder = "Bet name" id = "betName">
+                <h2>Bet variations</h2>
+                <div id = "variationsContainer">
+                <div id = "variationContainer1">
+                    <input type="text" placeholder = "Variation name" id = "variationName1">
+                    <input type="number" min = "1" step = "0.1" placeholder = "Odds" id = "variationOdds1">
+                    <img src="clear.png" id = "clear1" width="20">
+                </div>
+            </div>
+            <button id = "submit" onclick = "submitFc()">Submit</button>
+            <button onclick = "window.location.href = 'bets.html'">Cancel</button>
+            </div>
+        </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script src = "createBetScript.js"></script>
+    </body>
+</html>
