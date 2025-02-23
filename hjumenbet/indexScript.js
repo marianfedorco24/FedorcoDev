@@ -67,12 +67,3 @@ async function getDataAPI() {
 
 
 
-
-
-
-function backdoor () {
-    sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("email", "marian.fedorco@gmail.com");
-
-    window.location.href = "bets.html";
-}
