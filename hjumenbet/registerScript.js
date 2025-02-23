@@ -41,7 +41,7 @@ function register(event) {
                     return; // Handle error case
                 }
                 console.log("Updated data:", result);
-                alert("Data updated successfully!");
+                alert("Registered successfully!");
 
                 sessionStorage.setItem("isLoggedIn", "true"); //save the fact that the user is logged in
                 sessionStorage.setItem("email", email);
