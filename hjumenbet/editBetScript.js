@@ -119,6 +119,7 @@ async function saveChanges () {
         if ((variation.betVariationName.value.trim() === "") && (variation.betVariationOdds.value.trim() === "")) {}
         else if ((variation.betVariationName.value.trim() === "") | (variation.betVariationOdds.value.trim() === "")) {
             alert("Some values are missing!");
+            return;
             }
         else {
             editedBet.betVariationsAll.betVariations.push({
