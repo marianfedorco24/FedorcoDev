@@ -116,11 +116,17 @@ async function saveChanges () {
     };
     
     betReferenceList.betVariationsAll.betVariations.map((variation) => {
-        editedBet.betVariationsAll.betVariations.push({
-            betVariationName: variation.betVariationName.value,
-            betVariationOdds: variation.betVariationOdds.value,
-            userBet: 0
-        })
+        if ((variation.betVariationName.value.trim() === "") && (variation.betVariationOdds.value.trim() === "")) {}
+        else if ((variation.betVariationName.value.trim() === "") | (variation.betVariationOdds.value.trim() === "")) {
+            alert("Some values are missing!");
+            }
+        else {
+            editedBet.betVariationsAll.betVariations.push({
+                betVariationName: variation.betVariationName.value,
+                betVariationOdds: variation.betVariationOdds.value,
+                userBet: 0
+            })
+            }
     })
 
     let editedData = obtainedData.record;
