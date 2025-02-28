@@ -1,0 +1,94 @@
+nav {
+    position: fixed;
+    top: -10px;
+    width: fit-content;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 0px 0px 20px 20px;
+    padding: 20px 15px 10px 15px;
+    display: inline-flex;
+    justify-content: center;
+    gap: 5px;
+    background-color: rgb(218, 212, 206);
+}
+
+h1 {
+    margin: 70px 0px 30px 0px;
+}
+
+button {
+    all: unset;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 5px;
+}
+
+.navbarButtonIcon {
+    width: 30px;
+}
+
+.navbarButtonOutline {
+    border: solid;
+    border-radius: 7px;
+    border-width: 5px;
+    border-color: rgb(182, 177, 172);
+    background-color: rgb(182, 177, 172);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 450;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#betsCont {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.betCont {
+    background-color: rgb(218, 212, 206);
+    border-radius: 20px;
+    padding: 15px;
+}
+
+.variationsCont {
+    background-color: rgb(182, 177, 172);
+    border-radius: 1em;
+    padding: 10px;
+}
+
+.variationCont {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.addSubtractCont {
+    display: flex;
+}
+
+.betNameCont {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.betName {
+    margin: 0;
+}
+
+@media (max-width: 450px) {
+    .label {
+        display: none;
+    }
+}
