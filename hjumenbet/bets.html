@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HJUMENbet • Bets</title>
+        <link rel="icon" type="image/x-icon" href="\logo\hjumenbet_icon.ico">
+        <link rel="stylesheet" href="style\\betsStyle.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>      
+        <nav>
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton" onclick = "window.location.href = 'createBet.html'">
+                    <img src="..\\icons\\create.png" class = "navbarButtonIcon">
+                    <span class = "label">Create new bet</span>
+                </button>
+            </div>
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton">
+                    <img src="..\\icons\\user.png" class = "navbarButtonIcon">
+                    <span id = "userEmail" class = "label">email</span>
+                </button>
+            </div>
+        </nav>
+
+
+
+
+
+
+        <h1>Today's bets</h1>
+
+        <main id = "betsCont">
+        
+        </main>
+
+
+
+
+
+
+        <aside>
+            <button id = "saveBets" onclick = "saveBets()">Save your bets</button>
+        </aside>
+        <script src = "\script\betsScript.js"></script>
+    </body>
+</html>
