@@ -53,13 +53,13 @@ let betsReferenceList;
             // edit button
             betsReferenceList.bets[index].editButton = document.createElement("button");
             betsReferenceList.bets[index].editButton.id = `editButton${index + 1}`;
-            betsReferenceList.bets[index].editButton.classList.add("editButton", "betElements", "navbarButtonOutline");
+            betsReferenceList.bets[index].editButton.classList.add("editButton", "betElements");
             betsReferenceList.bets[index].betNameCont.appendChild(betsReferenceList.bets[index].editButton);
             betsReferenceList.bets[index].editButton.addEventListener("click", (e) => {edit(e)});
 
             betsReferenceList.bets[index].editButtonIcon = document.createElement("img");
             betsReferenceList.bets[index].editButtonIcon.src = "..\\icons\\edit.png";
-            betsReferenceList.bets[index].editButtonIcon.width = "15";
+            betsReferenceList.bets[index].editButtonIcon.classList.add("editButtonIcon");
             betsReferenceList.bets[index].editButton.appendChild(betsReferenceList.bets[index].editButtonIcon);
             
 
@@ -105,41 +105,38 @@ let betsReferenceList;
 
 
                     // amount
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet = document.createElement("input");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.type = "number";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.min = "0";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.step = "10"
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.value = 0
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.id = `userBet${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.classList.add("userBet", "variationElements");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet);
+                    //   container
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet = {};
+
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container = document.createElement("div");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.classList.add("variationElements", "userBetCont");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container);
+
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input = document.createElement("input");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.min = "0";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.step = "10"
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.value = 0
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.id = `userBet${index + 1}_${indexBetVariations + 1}`;
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.classList.add("userBet", "variationElements");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input);
+
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel = document.createElement("span");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel.innerHTML = "Kč";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel);
 
                     // add / subtract buttons
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons = {};
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container = document.createElement("div");
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.id = `addSubtractCont${index + 1}_${indexBetVariations + 1}`;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.classList.add("addSubtractCont", "variationElements");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container);
-
-                    //add
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton = {};
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button = document.createElement("button");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.id = `addButtonButton${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.classList.add("addButtonButton", "navbarButtonOutline");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button);
-
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon = document.createElement("img");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.src = "..\\icons\\add.png";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.width = "20";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.id = `addButtonIcon${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.classList.add("addButtonIcon");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon);
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container);
 
                     //subtract
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton = {};
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button = document.createElement("button");
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.id = `subtractButtonButton${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.classList.add("subtractButtonButton", "navbarButtonOutline");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.classList.add("subtractButtonButton");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.addEventListener("click", (e) => {userBetSubtract(e)});
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button);
 
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon = document.createElement("img");
@@ -148,6 +145,21 @@ let betsReferenceList;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.id = `subtractButtonIcon${index + 1}_${indexBetVariations + 1}`;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.classList.add("subtractButtonIcon");
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon);
+
+                    //add
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton = {};
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button = document.createElement("button");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.id = `addButtonButton${index + 1}_${indexBetVariations + 1}`;
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.classList.add("addButtonButton");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.addEventListener("click", (e) => {userBetAdd(e)});
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button);
+
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon = document.createElement("img");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.src = "..\\icons\\add.png";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.width = "20";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.id = `addButtonIcon${index + 1}_${indexBetVariations + 1}`;
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.classList.add("addButtonIcon");
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon);
                     
                     // check whether the user betted at all
                     let isUserBet = [false, null]; // did he bet?, if yes, on which index?
@@ -257,7 +269,23 @@ async function putDataAPI(dataToSend) {
 }
 
 function edit (event) {
-    let index = event.target.id.slice(-1);
-    sessionStorage.setItem("betIndex", index);
+    const editIndex = event.target.id.slice(-1);
+    sessionStorage.setItem("betIndex", editIndex - 1);
     window.location.href = "..\\editBet.html";
+}
+
+function userBetAdd (event) {
+    const betIndex = event.target.id.at(-3) - 1;
+    const variationIndex = event.target.id.at(-1) - 1;
+    const userBetNumber = Number(betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value);
+    betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value = userBetNumber + 10;
+}
+
+function userBetSubtract (event) {
+    const betIndex = event.target.id.at(-3) - 1;
+    const variationIndex = event.target.id.at(-1) - 1;
+    const userBetNumber = Number(betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value);
+    if (!(userBetNumber <= 0)) {
+        betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value = userBetNumber - 10;
+    }
 }
