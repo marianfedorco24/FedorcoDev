@@ -2,7 +2,7 @@ const urlAPI = "https://api.jsonbin.io/v3/b/67b627cbacd3cb34a8e889c7";
 const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '..\\index.html'; // Redirect to login if not logged in
+    window.location.href = '..\\hjumenbet\\index.html'; // Redirect to login if not logged in
 }
 
 const userEmail = sessionStorage.getItem("email");
@@ -58,7 +58,7 @@ let betsReferenceList;
             betsReferenceList.bets[index].editButton.addEventListener("click", (e) => {edit(e)});
 
             betsReferenceList.bets[index].editButtonIcon = document.createElement("img");
-            betsReferenceList.bets[index].editButtonIcon.src = "..\\icons\\edit.png";
+            betsReferenceList.bets[index].editButtonIcon.src = "..\\hjumenbet\\icons\\edit.png";
             betsReferenceList.bets[index].editButtonIcon.classList.add("editButtonIcon");
             betsReferenceList.bets[index].editButton.appendChild(betsReferenceList.bets[index].editButtonIcon);
             
@@ -140,7 +140,7 @@ let betsReferenceList;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button);
 
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon = document.createElement("img");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.src = "..\\icons\\subtract.png";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.src = "..\\hjumenbet\\icons\\subtract.png";
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.width = "20";
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.id = `subtractButtonIcon${index + 1}_${indexBetVariations + 1}`;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.classList.add("subtractButtonIcon");
@@ -155,7 +155,7 @@ let betsReferenceList;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button);
 
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon = document.createElement("img");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.src = "..\\icons\\add.png";
+                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.src = "..\\hjumenbet\\icons\\add.png";
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.width = "20";
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.id = `addButtonIcon${index + 1}_${indexBetVariations + 1}`;
                     betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.classList.add("addButtonIcon");
