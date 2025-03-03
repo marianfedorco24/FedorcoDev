@@ -222,7 +222,7 @@ async function saveBets () {
         console.log("Updated data:", result);
         alert("Data updated successfully!");
 
-        window.location.href = "..\\bets.html"; //redirect
+        window.location.href = "..\\hjumenbet\\bets.html"; //redirect
     })();
 }
 
