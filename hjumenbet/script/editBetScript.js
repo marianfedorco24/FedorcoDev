@@ -208,16 +208,21 @@ async function saveChanges () {
         }
         // assign the row to the editedBet object
         else {
-            if (variation.betVariationName.value !== obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName) {
-                toBeCleared[1].push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName);
+            // if the current variation is not new, check, if it`s name was changed... withoud checking whether it`s new, we bet an errow, because js wouldn`t be able to access it
+            if (!(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations.length < (variationIndex + 1))) {
+                // if the current variation`s name was changed, add it to the toBeCleared array
+                if (variation.betVariationName.value !== obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName) {
+                    toBeCleared[1].push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName);
+                }
             }
-
+            // add the variation to the object to be sent
             editedBet.betVariationsAll.betVariations.push({
                 betVariationName: variation.betVariationName.value,
                 betVariationOdds: variation.betVariationOdds.value,
                 userBet: 0
             }
         )
+            
 
         // check, if all the variations are empty
         if (  !(  (variation.betVariationName.value.trim() === "") && (variation.betVariationOdds.value.trim() === "")  )  ) {
