@@ -1,186 +1,168 @@
 const urlAPI = "https://api.jsonbin.io/v3/b/67b627cbacd3cb34a8e889c7";
 const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
+// check, whether the user is actually logged in
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '..\\hjumenbet\\index.html'; // Redirect to login if not logged in
+    window.location.href = '..\\index.html'; // Redirect to login if not logged in
 }
 
+// get the current user's email
 const userEmail = sessionStorage.getItem("email");
-
 const userEmailSpan = document.getElementById("userEmail");
 userEmailSpan.innerHTML = userEmail;
 
-let betsReferenceList;
+// create some variables
+const userBetAmountSpan = document.getElementById("userBetAmount");
+let userIndex;
+const main = document.querySelector("main");
 
 (async () => {
+    // get the data from the database
     const obtainedData = await getDataAPI(); // Wait for the data to be fetched
     if (obtainedData === null) {
         return; // Or handle the error appropriately.  The user has already been alerted.
         }
     const betsData = structuredClone(obtainedData.record.game.betsData);
     const betters = structuredClone(obtainedData.record.game.betters);
-    betsReferenceList = structuredClone(betsData);
     
+    // get the current user's index in betters
+    userIndex = betters.findIndex(better => better.email === userEmail);
 
-    betsReferenceList.container = document.getElementById("betsCont");
-    betsData.bets.map(
-        function (bet, index) {
-            // red
-            //            betContainer        
-            betsReferenceList.bets[index].container = document.createElement("section");
-            betsReferenceList.bets[index].container.id = `betCont${index + 1}`;
-            betsReferenceList.bets[index].container.classList.add("betCont");
-            //    containerParent                                betContainer
-            betsReferenceList.container.appendChild(betsReferenceList.bets[index].container);
+    // set the user's current bet amount
+    let userBetAmount = 0;
+    betters[userIndex].userBets.map((userBet, userBetIndex) => {
+        userBetAmount += Number(userBet.betAmount);
+    })
+    userBetAmountSpan.innerHTML = `${userBetAmount} Kč`;
 
-            // green
-            //container
-            betsReferenceList.bets[index].betNameCont = document.createElement("div");
-            betsReferenceList.bets[index].betNameCont.id = `betNameCont${index + 1}`;
-            betsReferenceList.bets[index].betNameCont.classList.add("betNameCont");
-            betsReferenceList.bets[index].container.appendChild(betsReferenceList.bets[index].betNameCont);
+    // go through each created bets
+    betsData.bets.map((currentBet, currentBetIndex) => {
+        // create the section for a bet
+        const section = document.createElement("section");
+        main.appendChild(section);
 
-            //             betName
-            betsReferenceList.bets[index].betName = document.createElement("h2");
-            //             betName
-            betsReferenceList.bets[index].betName.innerHTML = betsData.bets[index].betName;
-            betsReferenceList.bets[index].betName.style = "display: inline;";
-            betsReferenceList.bets[index].betName.id = `betName${index + 1}`;
-            betsReferenceList.bets[index].betName.classList.add("betName", "betElements");
-            //           betContainer                                           betName
-            betsReferenceList.bets[index].betNameCont.appendChild(betsReferenceList.bets[index].betName);
+        // create a container for the heading and an edit button
+        const headingCont = document.createElement("div");
+        headingCont.classList.add("headingCont");
+        section.appendChild(headingCont);
 
-            // edit button
-            betsReferenceList.bets[index].editButton = document.createElement("button");
-            betsReferenceList.bets[index].editButton.id = `editButton${index + 1}`;
-            betsReferenceList.bets[index].editButton.classList.add("editButton", "betElements");
-            betsReferenceList.bets[index].betNameCont.appendChild(betsReferenceList.bets[index].editButton);
-            betsReferenceList.bets[index].editButton.addEventListener("click", (e) => {edit(e)});
+        //     create the heading
+        const betHeading = document.createElement("h2");
+        betHeading.innerHTML = currentBet.betName;
+        betHeading.classList.add("betHeading");
+        headingCont.appendChild(betHeading);
 
-            betsReferenceList.bets[index].editButtonIcon = document.createElement("img");
-            betsReferenceList.bets[index].editButtonIcon.src = "..\\hjumenbet\\icons\\edit.png";
-            betsReferenceList.bets[index].editButtonIcon.classList.add("editButtonIcon");
-            betsReferenceList.bets[index].editButton.appendChild(betsReferenceList.bets[index].editButtonIcon);
-            
+        //     create the edit button
+        const editButton = document.createElement("img");
+        editButton.src = "icons/edit.png";
+        editButton.id = `editButton${currentBetIndex}`;
+        editButton.classList.add("editButton", "pointer");
+        editButton.addEventListener("click", (e) => {edit(e)});
+        headingCont.appendChild(editButton);
 
-            // yellow                                  
-            //               betVariationsContainer
-            betsReferenceList.bets[index].betVariationsAll.container = document.createElement("div");
-            betsReferenceList.bets[index].betVariationsAll.container.id = `variationsCont${index + 1}`;
-            betsReferenceList.bets[index].betVariationsAll.container.classList.add("variationsCont", "betElements");
-            //            betContainer                                             betVariationsContainer
-            betsReferenceList.bets[index].container.appendChild(betsReferenceList.bets[index].betVariationsAll.container);
+        // create a table for the variations
+        const variationsTable = document.createElement("table");
+        section.appendChild(variationsTable);
 
+        // create the table heading element
+        const tableHead = document.createElement("thead");
+        variationsTable.appendChild(tableHead);
 
-            // purples
-            //                      betVariations
-            betsReferenceList.bets[index].betVariationsAll.betVariations.map(
-                function (betVariation, indexBetVariations) {
-                    // variation container
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container = document.createElement("div");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.id = `variationCont${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.classList.add("variationCont");
-                    //              betVariationsContainer                                                                betVariationContainer
-                    betsReferenceList.bets[index].betVariationsAll.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container);
+        //     create a row for the headings
+        const headingRow = document.createElement("tr");
+        tableHead.appendChild(headingRow);
 
+        //         create the table headings
+        const tableHeadingVariation = document.createElement("th");
+        tableHeadingVariation.innerHTML = "Bet variation";
+        headingRow.appendChild(tableHeadingVariation);
 
-                    // name
-                    //                                    betVariationName
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName = document.createElement("span");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName.innerHTML = betsData.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName.id = `variationName${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName.classList.add("variationName", "variationElements");
-                    //                                  betVariationContainer
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName);
+        const tableHeadingOdds = document.createElement("th");
+        tableHeadingOdds.innerHTML = "Odds";
+        headingRow.appendChild(tableHeadingOdds);
 
+        const tableHeadingBet = document.createElement("th");
+        tableHeadingBet.innerHTML = "Your bet";
+        headingRow.appendChild(tableHeadingBet);
 
-                    // odds
-                    //                                      betVariationOdds
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds = document.createElement("span");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds.innerHTML = betsData.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds.id = `variationOdds${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds.classList.add("variationOdds", "variationElements");
-                    //                                  betVariationContainer
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationOdds);
+        // create the table body
+        const tableBody = document.createElement("tbody");
+        variationsTable.appendChild(tableBody);
 
+        // go through each bet variations
+        currentBet.betVariationsAll.betVariations.map((currentVariation, currentVariationIndex) => {
+            // create a row for the current variation
+            const variationRow = document.createElement("tr");
+            tableBody.appendChild(variationRow);
 
-                    // amount
-                    //   container
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet = {};
+            // create a td for the variation name 
+            const variationNameTd = document.createElement("td");
+            variationNameTd.innerHTML = currentVariation.betVariationName;
+            variationRow.appendChild(variationNameTd);
 
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container = document.createElement("div");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.classList.add("variationElements", "userBetCont");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container);
+            // create a td for the variation odds
+            const variationOddsTd = document.createElement("td");
+            variationOddsTd.innerHTML = currentVariation.betVariationOdds;
+            variationRow.appendChild(variationOddsTd);
 
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input = document.createElement("input");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.min = "0";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.step = "10"
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.value = 0
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.id = `userBet${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input.classList.add("userBet", "variationElements");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.input);
+            // create a td for the betted amount
+            const bettedAmountTd = document.createElement("td");
+            bettedAmountTd.classList.add("bettedAmountTd");
+            variationRow.appendChild(bettedAmountTd);
 
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel = document.createElement("span");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel.innerHTML = "Kč";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.currencyLabel);
+            // create a wapper for all the elements inside for CSS purposes
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("wrapper");
+            bettedAmountTd.appendChild(wrapper);
 
-                    // add / subtract buttons
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons = {};
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container = document.createElement("div");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.id = `addSubtractCont${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.classList.add("addSubtractCont", "variationElements");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container);
+            //     create a div for the amount input and currency span
+            const bettedAmountAmountCont = document.createElement("div");
+            bettedAmountAmountCont.classList.add("bettedAmountAmountCont");
+            wrapper.appendChild(bettedAmountAmountCont);
 
-                    //subtract
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton = {};
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button = document.createElement("button");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.id = `subtractButtonButton${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.classList.add("subtractButtonButton");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.addEventListener("click", (e) => {userBetSubtract(e)});
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button);
+            //         create the bet amount input
+            const bettedAmountInput = document.createElement("input");
+            bettedAmountInput.type = "number";
+            bettedAmountInput.min = "0";
+            bettedAmountInput.step = "10";
+            bettedAmountInput.value = 0;
+            bettedAmountInput.classList.add("bettedAmountInput");
+            bettedAmountAmountCont.appendChild(bettedAmountInput);
 
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon = document.createElement("img");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.src = "..\\hjumenbet\\icons\\subtract.png";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.width = "20";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.id = `subtractButtonIcon${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon.classList.add("subtractButtonIcon");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.button.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.subtractButton.icon);
+            //         create the bet amount currency span
+            const bettedAmountCurrencySpan = document.createElement("span");
+            bettedAmountCurrencySpan.innerHTML = "Kč";
+            bettedAmountAmountCont.appendChild(bettedAmountCurrencySpan);
 
-                    //add
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton = {};
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button = document.createElement("button");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.id = `addButtonButton${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.classList.add("addButtonButton");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.addEventListener("click", (e) => {userBetAdd(e)});
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.container.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button);
+            //     create a div for the add subtract buttons
+            const addSubtractCont = document.createElement("div");
+            addSubtractCont.classList.add("addSubtractCont");
+            wrapper.appendChild(addSubtractCont);
 
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon = document.createElement("img");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.src = "..\\hjumenbet\\icons\\add.png";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.width = "20";
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.id = `addButtonIcon${index + 1}_${indexBetVariations + 1}`;
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon.classList.add("addButtonIcon");
-                    betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.button.appendChild(betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].addSubtractButtons.addButton.icon);
-                    
-                    // check whether the user betted at all
-                    let isUserBet = [false, null]; // did he bet?, if yes, on which index?
-                    betters.map(
-                        function (better, betterIndex) {
-                            if (userEmail === better.email) {
-                                isUserBet = [true, betterIndex];
-                            }
-                        }
-                    )
+            //         create a add button
+            const addButton = document.createElement("img");
+            addButton.src = "icons/add.png";
+            addButton.id = `addButton${currentBetIndex}_${currentVariationIndex}`;
+            addButton.classList.add("addSubtractButton")
+            addButton.addEventListener("click", (e) => {userBetAdd(e)});
+            addSubtractCont.appendChild(addButton);
+
+            //         create a subtract button
+            const subtractButton = document.createElement("img");
+            subtractButton.src = "icons/subtract.png";
+            subtractButton.id = `subtractButton${currentBetIndex}_${currentVariationIndex}`;
+            subtractButton.classList.add("addSubtractButton")
+            subtractButton.addEventListener("click", (e) => {userBetSubtract(e)});
+            addSubtractCont.appendChild(subtractButton);
 
 
-                    if (isUserBet[0]) { //if the user has some bets:
-                        betters[isUserBet[1]].userBets.map(function (variation, variationIndex) { // go through the bets
-                            if ((variation.bet === betsData.bets[index].betName) && (variation.betVariation === betsData.bets[index].betVariationsAll.betVariations[indexBetVariations].betVariationName)) { // if it matches the current element that is being created:
-                                betsReferenceList.bets[index].betVariationsAll.betVariations[indexBetVariations].userBet.value = variation.betAmount; // assign the bet value
-                            }
-                        })
-                    }
+            // set the user's bet amounts
+            betters[userIndex].userBets.map((variation, variationIndex) => { // go through the user's bets
+                if ((variation.bet === betsData.bets[currentBetIndex].betName) && (variation.betVariation === betsData.bets[currentBetIndex].betVariationsAll.betVariations[currentVariationIndex].betVariationName)) { // if it matches the current element that is being created:
+                    bettedAmountInput.value = variation.betAmount; // asign the bet value
                 }
-            )
+            })
+        })
         }
     )
 }
@@ -198,31 +180,29 @@ async function saveBets () {
 
     let newUserBets = [];
 
-    betsReferenceList.bets.map((bet, betIndex) => {
-        bet.betVariationsAll.betVariations.map((variation, variationIndex) => {
-            newUserBets.push({
-                bet: bet.betName.innerHTML,
-                betVariation: variation.betVariationName.innerHTML,
-                betAmount: variation.userBet.value
-            })
+    Array.from(main.children).map((currentBet, currentBetIndex) => {
+        Array.from(currentBet.lastChild.lastChild.children).map((currentVariation, currentVariationIndex) => {
+            if (currentVariation.lastChild.firstChild.firstChild.firstChild.value !== undefined && currentVariation.lastChild.firstChild.firstChild.firstChild.value !== "0") {
+                newUserBets.push({
+                    bet: currentBet.firstChild.firstChild.innerHTML,
+                    betVariation: currentVariation.firstChild.innerHTML,
+                    betAmount: currentVariation.lastChild.firstChild.firstChild.firstChild.value
+                })
+            }
         })
     })
 
-    newUserBets = newUserBets.filter(element => element.betAmount !== "0")
-
     let newData = structuredClone(cleanData);
     newData.game.betters[thisUserBetIndex].userBets = newUserBets;
-    console.log(newData);
-
+    
     (async () => {
         const result = await putDataAPI(newData);
         if (result === null) {
             return; // Handle error case
         }
-        console.log("Updated data:", result);
-        alert("Data updated successfully!");
+        alert("Your bets were updated succesfully!");
 
-        window.location.href = "..\\hjumenbet\\bets.html"; //redirect
+        window.location.href = "..\\bets.html"; //redirect
     })();
 }
 
@@ -258,7 +238,6 @@ async function putDataAPI(dataToSend) {
             };
         const response = await fetch(urlAPI, options);
         const data = await response.json();
-        console.log("PUT request successful:", data);
         return data;
     }
     catch (error) {
@@ -270,22 +249,22 @@ async function putDataAPI(dataToSend) {
 
 function edit (event) {
     const editIndex = event.target.id.slice(-1);
-    sessionStorage.setItem("betIndex", editIndex - 1);
+    sessionStorage.setItem("betIndex", editIndex);
     window.location.href = "..\\editBet.html";
 }
 
 function userBetAdd (event) {
-    const betIndex = event.target.id.at(-3) - 1;
-    const variationIndex = event.target.id.at(-1) - 1;
-    const userBetNumber = Number(betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value);
-    betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value = userBetNumber + 10;
+    const betIndex = event.target.id.at(-3);
+    const variationIndex = event.target.id.at(-1);
+    const amountInputCurrent = main.children[betIndex].lastChild.lastChild.children[variationIndex].lastChild.firstChild.firstChild.firstChild;
+    amountInputCurrent.value = Number(amountInputCurrent.value) + 10;
 }
 
 function userBetSubtract (event) {
-    const betIndex = event.target.id.at(-3) - 1;
-    const variationIndex = event.target.id.at(-1) - 1;
-    const userBetNumber = Number(betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value);
-    if (!(userBetNumber <= 0)) {
-        betsReferenceList.bets[betIndex].betVariationsAll.betVariations[variationIndex].userBet.input.value = userBetNumber - 10;
+    const betIndex = event.target.id.at(-3);
+    const variationIndex = event.target.id.at(-1);
+    const amountInputCurrent = main.children[betIndex].lastChild.lastChild.children[variationIndex].lastChild.firstChild.firstChild.firstChild;
+    if (!(amountInputCurrent.value <= 0)) {
+        amountInputCurrent.value = Number(amountInputCurrent.value) - 10;
     }
 }
