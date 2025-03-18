@@ -9,7 +9,6 @@ function register(event) {
     
     if (email === "" | pass === "") {
         alert("Enter your full login information.");
-        console.log("User didn't input all the necessary login information.");
         return;
     }
 
@@ -21,11 +20,9 @@ function register(event) {
 
         let isUserPresent = false;
         // Loop through logins and check for valid credentials
-        console.log(obtainedData);
         for (let user of obtainedData.record.logins) {
             if (email === user[0]) {
                 alert("You have already been registered.");
-                console.log("User already registered.");
                 isUserPresent = true;
                 break; // Exit loop once credentials are found
             }
@@ -36,11 +33,14 @@ function register(event) {
             (async () => {
                 const dataToSend = obtainedData.record;
                 dataToSend.logins.push([email, pass]);
+                dataToSend.game.betters.push({
+                    email: email,
+                    userBets: []
+                })
                 const result = await putDataAPI(dataToSend);
                 if (result === null) {
                     return; // Handle error case
                 }
-                console.log("Updated data:", result);
                 alert("Data updated successfully!");
 
                 sessionStorage.setItem("isLoggedIn", "true"); //save the fact that the user is logged in
@@ -83,7 +83,6 @@ async function putDataAPI(dataToSend) {
             };
         const response = await fetch(urlAPI, options);
         const data = await response.json();
-        console.log("PUT request successful:", data);
         return data;
     }
     catch (error) {
