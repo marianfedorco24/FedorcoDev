@@ -3,29 +3,46 @@
     <head>
         <title>HJUMENbet • Edit bet</title>
         <link rel="icon" type="image/x-icon" href="\logo\hjumenbet_icon.ico">
+        <link rel="stylesheet" href="style/editBetStyle.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <main>
-            <h1>Edit a bet</h1>
-            <div id = betContainerAll>
-                <div id = "betNameContainer">
-                    <span>Bet name</span>
-                    <br>
-                    <input type="text" id = "betName">
-                </div>
-                <div id = "variationsContainer">
-                    <div id = "labelsContainer">
-                        <span>Variation name</span>
-                        <span>Variation odds</span>
-                    </div>
-                </div>
-                <div id = "buttonsContainer">
-                    <button id = "saveChangesButton">Save changes</button>
-                    <button id = "deleteBetButton">Delete bet</button>
-                </div>
+        <nav>
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton" onclick = "window.location.href = 'bets.html'">
+                    <img src="..\\icons\\home.png" class = "navbarButtonIcon">
+                    <label class = "label labelHide pointer">Home</label>
+                </button>
             </div>
-
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton">
+                    <img src="..\\icons\\user.png" class = "navbarButtonIcon">
+                    <label id = "userEmail" class = "label labelHide pointer">email</label>
+                </button>
+            </div>
+        </nav>
+        <h1>Edit a bet</h1>
+        <main>
+            <div class = "createBetSection">
+                <h2>Bet name</h2>
+                <input type="text" id = "betName">
+            </div>
+            <div class = "createBetSection">
+                <h2>Bet variations</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Variation name</th>
+                            <th>Odds</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id = "buttonsContainer">
+                <button id = "saveChangesButton" class = "editBetButton">Save changes</button>
+                <button id = "deleteBetButton" class = "editBetButton">Delete bet</button>
+            </div>
         </main>
         <script src = "\script\editBetScript.js"></script>
     </body>
