@@ -4,86 +4,108 @@ const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
     window.location.href = '..\\index.html'; // Redirect to login if not logged in
 }
+
+const userEmail = sessionStorage.getItem("email");
+const userEmailSpan = document.getElementById("userEmail");
+userEmailSpan.innerHTML = userEmail;
+const tableBody = document.querySelector("tbody");
+
+
 // create an object to store the dynamic variation elements
-let betVariationsObj = {
-    container: [document.getElementById("variationContainer1")],
-    variationName: [document.getElementById("variationName1")],
-    variationOdds: [document.getElementById("variationOdds1")],
-    clearButton: [document.getElementById("clear1")]
-}
+let betVariationsObj = [
+    {
+        variationNameInput: document.getElementById("variationNameInput1"),
+        variationOddsInput: document.getElementById("variationOddsInput1"),
+        variationClearButton: document.getElementById("variationClearButton1")
+    }
+];
+
 // asign events to the elements from html
-betVariationsObj.variationOdds[0].addEventListener("click", newRow);
-betVariationsObj.clearButton[0].addEventListener("click", (e) => {clearInputs(e)});
+betVariationsObj[0].variationOddsInput.addEventListener("click", newRow);
+betVariationsObj[0].variationClearButton.addEventListener("click", (e) => {clearInputs(e)});
+
 // define a function that creates new rows, when needed
-function newRow() {
-    const newElementIndex = betVariationsObj.container.length; // get the index number, for naming the elements
-    const parentContainer = document.getElementById("variationsContainer"); // for better readability, get the parent variationsContainer div
-    if (betVariationsObj.variationName[newElementIndex - 1].value === "") { // if the row is already created, don't create it again
+function newRow () {
+    const newElementIndex = betVariationsObj.length; // get the new row's index
+
+    if (betVariationsObj[newElementIndex - 1].variationNameInput.value === "") { // if the row is already created, don't create it again
         return;
     }
 
-    // create a container element and assign it to the betVariationsObj
-    betVariationsObj.container.push(document.createElement("div"));
-    betVariationsObj.container[newElementIndex].id = `variationContainer${newElementIndex + 1}`;
-    parentContainer.appendChild(betVariationsObj.container[newElementIndex]);
-    
-    // create a variationName input and assign it to the betVariationsObj
-    betVariationsObj.variationName.push(document.createElement("input"));
-    betVariationsObj.variationName[newElementIndex].type = "text";
-    betVariationsObj.variationName[newElementIndex].id = `variationName${newElementIndex + 1}`;
-    betVariationsObj.variationName[newElementIndex].placeholder = "Variation name"
-    betVariationsObj.container[newElementIndex].appendChild(betVariationsObj.variationName[newElementIndex]);
+    const newRowTr = document.createElement("tr");
+    tableBody.appendChild(newRowTr);
 
-    // create a variationOdds input and assign it to the betVariationsObj
-    betVariationsObj.variationOdds.push(document.createElement("input"));
-    betVariationsObj.variationOdds[newElementIndex].type = "number";
-    betVariationsObj.variationOdds[newElementIndex].min = "1";
-    betVariationsObj.variationOdds[newElementIndex].step = "0.1";
-    betVariationsObj.variationOdds[newElementIndex].id = `variationOdds${newElementIndex + 1}`;
-    betVariationsObj.variationOdds[newElementIndex].placeholder = "Odds";
-    betVariationsObj.container[newElementIndex].appendChild(betVariationsObj.variationOdds[newElementIndex]);
+    betVariationsObj.push({}); // create a new object in the betVariationsObj list
 
-    // create a clear button and assign it to the betVariationsObj
-    betVariationsObj.clearButton.push(document.createElement("img"));
-    betVariationsObj.clearButton[newElementIndex].id = `clear${newElementIndex + 1}`;
-    betVariationsObj.clearButton[newElementIndex].src = "..\\icons\\clear.png";
-    betVariationsObj.clearButton[newElementIndex].width = "20";
-    betVariationsObj.container[newElementIndex].appendChild(betVariationsObj.clearButton[newElementIndex]);
+    // create the variation name input
+    const variationNameInputTd = document.createElement("td");
+    newRowTr.appendChild(variationNameInputTd);
+
+    betVariationsObj[newElementIndex].variationNameInput = document.createElement("input");
+    betVariationsObj[newElementIndex].variationNameInput.placeholder = "Variation name";
+    variationNameInputTd.appendChild(betVariationsObj[newElementIndex].variationNameInput);
+
+
+    // create the variation odds input
+    const variationOddsInputTd = document.createElement("td");
+    newRowTr.appendChild(variationOddsInputTd);
+
+    betVariationsObj[newElementIndex].variationOddsInput = document.createElement("input");
+    betVariationsObj[newElementIndex].variationOddsInput.type = "number";
+    betVariationsObj[newElementIndex].variationOddsInput.min = "1";
+    betVariationsObj[newElementIndex].variationOddsInput.step = "0.1";
+    betVariationsObj[newElementIndex].variationOddsInput.placeholder = "Odds";
+    variationOddsInputTd.appendChild(betVariationsObj[newElementIndex].variationOddsInput);
+
+
+    // create a clear button
+    const variationClearButtonTd = document.createElement("td");
+    newRowTr.appendChild(variationClearButtonTd);
+
+    betVariationsObj[newElementIndex].variationClearButton = document.createElement("img");
+    betVariationsObj[newElementIndex].variationClearButton.src = "..\\icons\\clear.png";
+    betVariationsObj[newElementIndex].variationClearButton.id = `variationClearButton${newElementIndex + 1}`;
+    variationClearButtonTd.appendChild(betVariationsObj[newElementIndex].variationClearButton);
+
 
     //assign the events to the elements
-    betVariationsObj.clearButton[newElementIndex].addEventListener("click", (e) => {clearInputs(e)});
-    betVariationsObj.variationOdds[newElementIndex].addEventListener("click", newRow);
+    betVariationsObj[newElementIndex].variationClearButton.addEventListener("click", (e) => {clearInputs(e)});
+    betVariationsObj[newElementIndex].variationOddsInput.addEventListener("click", newRow);
+
+
 }
 
 function clearInputs (event) {
-    const index = event.target.id.slice(-1) - 1;
-    betVariationsObj.variationName[index].value = "";
-    betVariationsObj.variationOdds[index].value = "";
+    const currentIndex = event.target.id.slice(-1) - 1;
+    betVariationsObj[currentIndex].variationNameInput.value = "";
+    betVariationsObj[currentIndex].variationOddsInput.value = "";
+
+    // hide the row
+    const visibleElements = Array.from(tableBody.children).filter(el => window.getComputedStyle(el).display !== "none");
+    if (visibleElements.length - 1 > 0) {
+        tableBody.children[currentIndex].style.display = "none";
+    }
 }
 
-const betName = document.getElementById("betName");
-
+const betNameInput = document.getElementById("betName");
 const submitButton = document.getElementById("submit");
 
 function submitFc () {
-    if (betName.value.trim() === "") {
+    if (betNameInput.value.trim() === "") {
         alert("Bet name is not set!");
-        console.log("Bet name was not set.");
         return;
     }
 
     else if ((() => { // if all the row variations are empty, don't submit
         let isEmpty = true;
-        console.log(betVariationsObj);
-        betVariationsObj.container.map((container, containerIndex) => {
-            if ( !((betVariationsObj.variationName[containerIndex].value.trim() === "")   |   (betVariationsObj.variationOdds[containerIndex].value.trim() === "")) ) {
+        betVariationsObj.map((row, rowIndex) => {
+            if ( !((betVariationsObj[rowIndex].variationNameInput.value.trim() === "")   |   (betVariationsObj[rowIndex].variationOddsInput.value.trim() === "")) ) {
                 isEmpty = false;
             }
         });
         return isEmpty;
     })()) {
-        alert("None of the variation rows are complete, therefore the bet was not submitted!");
-        console.log("Submit function not ran, no variation rows were complete.");
+        alert("None of the variation rows are complete, therefore the bet was not created!");
         return;
     }
 
@@ -97,21 +119,21 @@ function submitFc () {
         let newData = structuredClone(obtainedData); // duplicate the obtained data to the "to be sent" data object
 
         let betToAdd = {
-            betName: betName.value.trim(),
+            betName: betNameInput.value.trim(),
             betVariationsAll: {
                 betVariations: []
             }
         }
         
-        betVariationsObj.container.map(function (el, index) { // start building the newData object, iterate for the number of elements
-            if ((betVariationsObj.variationName[index].value.trim() === "") | (betVariationsObj.variationOdds[index].value.trim() === "")) { // if the row variation row is empty, skip it
+        betVariationsObj.map(function (el, index) { // start building the newData object, iterate for the number of elements
+            if ((betVariationsObj[index].variationNameInput.value.trim() === "")   |   (betVariationsObj[index].variationOddsInput.value.trim() === "")) { // if the row variation row is empty, skip it
                 return;
             }
 
             // construct the bet data
             betToAdd.betVariationsAll.betVariations.push({
-                betVariationName: betVariationsObj.variationName[index].value.trim(),
-                betVariationOdds: Number(betVariationsObj.variationOdds[index].value.trim()),
+                betVariationName: betVariationsObj[index].variationNameInput.value.trim(),
+                betVariationOdds: Number(betVariationsObj[index].variationOddsInput.value.trim()),
                 userBet: 0
             })
         })
@@ -121,7 +143,6 @@ function submitFc () {
         if (result === null) {
             return; // Handle error case
         }
-        console.log("Updated data:", result);
         alert("Data updated successfully!");
         window.location.href = "..\\bets.html";
     })();
@@ -159,7 +180,6 @@ async function putDataAPI(dataToSend) {
             };
         const response = await fetch(urlAPI, options);
         const data = await response.json();
-        console.log("PUT request successful:", data);
         return data;
     }
     catch (error) {
