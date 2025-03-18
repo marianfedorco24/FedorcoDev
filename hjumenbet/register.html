@@ -3,17 +3,18 @@
     <head>
         <title>HJUMENbet • Register</title>
         <link rel="icon" type="image/x-icon" href="\logo\hjumenbet_icon.ico">
+        <link rel="stylesheet" href="style/registerStyle.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <form>
+        <main>
             <h1>Register</h1>
-            <input id = "emailEnt" type="email" placeholder = "Email" required>
-            <br>
-            <input id = "passEnt" type="password" placeholder = "Password" required>
-            <br>
-            <button onclick = "register(event)">Register</button>
-        </form>
+            <form>
+                <input id = "emailEnt" type="email" placeholder = "Email" required>
+                <input id = "passEnt" type="password" placeholder = "Password" required>
+                <button onclick = "register(event)">Register</button>
+            </form>
+        </main>
         <script src = "\script\registerScript.js"></script>
     </body>
 </html>
