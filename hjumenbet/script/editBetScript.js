@@ -5,26 +5,23 @@ if (sessionStorage.getItem('isLoggedIn') !== 'true') {
     window.location.href = '..\\index.html'; // Redirect to login if not logged in
 }
 
+const userEmail = sessionStorage.getItem("email");
+const userEmailSpan = document.getElementById("userEmail");
+userEmailSpan.innerHTML = userEmail;
+
 // get the index of the bet to be edited
 const betIndex = Number(sessionStorage.getItem("betIndex"));
 
-//define an object to store the elements in
-let betReferenceList = {
-    betVariationsAll: {
-        betVariations: []
-    }
-};
-
-// save the main element and the betContainerAll
+// save some elements
 const main = document.querySelector("main");
-const betContainerAll = document.getElementById("betContainerAll");
 const variationsContainer = document.getElementById("variationsContainer");
+const tbody = document.querySelector("tbody");
 
 // create an array to store the deleted bet variations that are to be deleted form the user bets array in the database
-let toBeCleared = [
-    null,
-    []
-];
+let toBeCleared = {
+    betName: null,
+    betVariations: []
+};
 
 // run the main function displaying the bet
 (async () => {
@@ -39,20 +36,15 @@ let toBeCleared = [
     // set some variables
     const cleanData = structuredClone(obtainedData.record);
     const betsData = structuredClone(cleanData.game.betsData);
+    const betNameInput = document.getElementById("betName");
+
+    // set the betname input
+    betNameInput.value = betsData.bets[betIndex].betName;
 
     // save the betName to the toBeCleared array
-    toBeCleared[0] = betsData.bets[betIndex].betName
-    
-    // assign the benName element to the betReferenceList object
-    betReferenceList.betName = document.getElementById("betName");
-    betReferenceList.betName.value = betsData.bets[betIndex].betName;
-    
-    // create a container for the betVariationRows
-    betReferenceList.betVariationsAll.container = document.createElement("div");
-    betReferenceList.betVariationsAll.container.id = "betVariationRowsContainer";
-    variationsContainer.appendChild(betReferenceList.betVariationsAll.container);
+    toBeCleared.betName = betsData.bets[betIndex].betName;
 
-    // create a row for each betVariation
+    // create a table row for each betVariation
     betsData.bets[betIndex].betVariationsAll.betVariations.map((variation, variationIndex) => {
         newRow(variation, variationIndex, true);
     })
@@ -69,65 +61,87 @@ let toBeCleared = [
     deleteBetButton.addEventListener("click", deleteBet);
 }
 )();
+
 // function to decide whether a new row should be cretated
 function newRowTrigger () {
-    // get the index of the last row
-    const lastRowIndex = betReferenceList.betVariationsAll.betVariations.length - 1;
+    // get the index of the new row
+    const newRowIndex = tbody.children.length;
+
+    // get the current row
+    const currentRow = tbody.lastChild;
+
     // check whether the row was already created
-    if (!(betReferenceList.betVariationsAll.betVariations[lastRowIndex].betVariationName.value === "")) {
-        newRow(null, lastRowIndex + 1, false);
+    if (!(currentRow.children[0].firstChild.value === "")) {
+        newRow(null, newRowIndex, false);
     }
 }
+
 // function to create a new bet variation row
 function newRow (variation, variationIndex, isValueNeeded) {
-    // create a container
-    betReferenceList.betVariationsAll.betVariations.push({container: document.createElement("div")});
-    betReferenceList.betVariationsAll.container.appendChild(betReferenceList.betVariationsAll.betVariations[variationIndex].container);
+    // create a new table row
+    const variationRow = document.createElement("tr");
+    tbody.appendChild(variationRow);
 
-    // create bet variation name input
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationName = document.createElement("input");
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationName.type = "text";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationName.placeholder = "Variation name";
-    // decide, whether to assign a value to the new bet variation name input
-    if (isValueNeeded) {
-        betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationName.value = variation.betVariationName;
-    }
-    betReferenceList.betVariationsAll.betVariations[variationIndex].container.appendChild(betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationName);
 
-    // create bet variation odds input
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds = document.createElement("input");
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.type = "number";
-    // decide, whether to assign a value to the new variation odds input
+    // add the variation name input
+    const variationNameInputTd = document.createElement("td");
+    variationRow.appendChild(variationNameInputTd);
+
+    const variationNameInput = document.createElement("input");
+    variationNameInput.placeholder = "Variation name"
+    variationNameInputTd.appendChild(variationNameInput);
+
+
+    // add the variation odds input
+    const variationOddsInputTd = document.createElement("td");
+    variationRow.appendChild(variationOddsInputTd);
+
+    const variationOddsInput = document.createElement("input");
+    variationOddsInput.placeholder = "Odds";
+    variationOddsInput.type = "number";
+    variationOddsInput.min = "1";
+    variationOddsInput.step = "0.1";
+    variationOddsInput.addEventListener("click", newRowTrigger);
+    variationOddsInputTd.appendChild(variationOddsInput);
+
+
+    // decide, whether to assign values
     if (isValueNeeded) {
-        betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.value = variation.betVariationOdds;
+        variationNameInput.value = variation.betVariationName;
+        variationOddsInput.value = variation.betVariationOdds;
     }
-    // give the odds input some parameters
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.min = "1";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.step = "0.1";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.placeholder = "Odds";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds.addEventListener("click", newRowTrigger);
-    betReferenceList.betVariationsAll.betVariations[variationIndex].container.appendChild(betReferenceList.betVariationsAll.betVariations[variationIndex].betVariationOdds);
+
 
     // create a clear button
-    betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton = document.createElement("img");
-    betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton.src = "..\\icons\\clear.png";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton.width = "20";
-    betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton.id = `clearButton${variationIndex}`
-    betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton.addEventListener("click", ("click", (e) => {clearInputs(e)}));
-    betReferenceList.betVariationsAll.betVariations[variationIndex].container.appendChild(betReferenceList.betVariationsAll.betVariations[variationIndex].clearButton);
+    const clearButtonTd = document.createElement("td");
+    variationRow.appendChild(clearButtonTd);
+
+    const clearButton = document.createElement("img");
+    clearButton.src = "..\\icons\\clear.png";
+    clearButton.classList.add("clearButton", "pointer");
+    clearButton.id = `clearButton${variationIndex}`;
+    clearButton.addEventListener("click", ("click", (e) => {clearInputs(e)}));
+    clearButtonTd.appendChild(clearButton);
 }
 
 // function to clear the inputs of a row
 function clearInputs (event) {
     // get the index of the targeted row
-    const index = event.target.id.slice(-1);
+    const currentIndex = event.target.id.slice(-1);
+    const currentRowTds = tbody.children[currentIndex].children;
 
     // add the bet variation to the toBeCleared array
-    toBeCleared[1].push(betReferenceList.betVariationsAll.betVariations[index].betVariationName.value);
+    toBeCleared.betVariations.push(currentRowTds[0].firstChild.value);
 
     // clear the inputs on the bebpage
-    betReferenceList.betVariationsAll.betVariations[index].betVariationName.value = "";
-    betReferenceList.betVariationsAll.betVariations[index].betVariationOdds.value = "";
+    currentRowTds[0].firstChild.value = "";
+    currentRowTds[1].firstChild.value = "";
+
+    // hide the row
+    const visibleElements = Array.from(tbody.children).filter(el => window.getComputedStyle(el).display !== "none");
+    if (visibleElements.length - 1 > 0) {
+        tbody.children[currentIndex].style.display = "none";
+    }
 }
 
 // function to remove a specified bet from all users in the user bets database
@@ -159,12 +173,14 @@ async function removeUserBets (betName, variationName) {
     const result = await putDataAPI(newData);
         if (result === null) {
             return; // Handle error case
-        }
-
+            }
 }
 
 // function for the save chaanges button
 async function saveChanges () {
+    // define some variables
+    const betName = document.getElementById("betName");
+
     // get data from the database and check it
     const obtainedData = await getDataAPI(); // Wait for the data to be fetched
     if (obtainedData === null) {
@@ -173,14 +189,14 @@ async function saveChanges () {
 
     // create an object to store the new edited bet into
     let editedBet = {
-        betName: betReferenceList.betName.value,
+        betName: betName.value,
         betVariationsAll: {
             betVariations: []
         }
     };
     
     // check if the bet name is missing
-    if (betReferenceList.betName.value.trim() === "") {
+    if (betName.value.trim() === "") {
         alert("Enter the name of the bet!");
         return;
     }
@@ -189,63 +205,64 @@ async function saveChanges () {
     let isEmpty = true;
 
     // go through all the rows
-    for (let variation of betReferenceList.betVariationsAll.betVariations) {
-        // get the index of the current variation
-        const variationIndex = betReferenceList.betVariationsAll.betVariations.indexOf(variation);
-        
-        // check, if the whole row is empty
-        if ((variation.betVariationName.value.trim() === "") && (variation.betVariationOdds.value.trim() === "")) {
+    for (const [rowIndex, row] of [...tbody.children].entries()) {
+        const currentRowTds = row.children;
+    
+        // check if the row is empty
+        if (currentRowTds[0].firstChild.value.trim() === "" && currentRowTds[1].firstChild.value.trim() === "") {
             try {
-                toBeCleared[1].push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName);
+                toBeCleared.betVariations.push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName);
             }
-            catch {continue;}
+            catch {
+                continue; // Skip to next row
+            }
         }
-        // check, if some of the values are missing
-        else if ((variation.betVariationName.value.trim() === "") | (variation.betVariationOdds.value.trim() === "")) {
-            alert("Some values are missing!");
-            console.log("some values are missing");
+
+        // check whether some values are missing
+        else if (currentRowTds[0].firstChild.value.trim() === "" | currentRowTds[1].firstChild.value.trim() === "") {
+            alert("Some values are missing,\nor INVALID format!\n(Don't use COMMAS for decimal points.)");
             return;
         }
+
         // assign the row to the editedBet object
         else {
-            // if the current variation is not new, check, if it`s name was changed... withoud checking whether it`s new, we bet an errow, because js wouldn`t be able to access it
-            if (!(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations.length < (variationIndex + 1))) {
+            // mark that not all the variations are empty
+            isEmpty = false;
+
+            // if the current variation is not new, check, if it`s name was changed... without checking whether it`s new, we get an error, because js wouldn`t be able to access it
+            if (!(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations.length < (rowIndex + 1))) {
                 // if the current variation`s name was changed, add it to the toBeCleared array
-                if (variation.betVariationName.value !== obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName) {
-                    toBeCleared[1].push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[variationIndex].betVariationName);
+                if (currentRowTds[0].firstChild.value.trim() !== obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName) {
+                    toBeCleared.betVariations.push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName);
                 }
             }
             // add the variation to the object to be sent
             editedBet.betVariationsAll.betVariations.push({
-                betVariationName: variation.betVariationName.value,
-                betVariationOdds: variation.betVariationOdds.value,
+                betVariationName: currentRowTds[0].firstChild.value.trim(),
+                betVariationOdds: currentRowTds[1].firstChild.value.trim(),
                 userBet: 0
             }
         )
-            
-
-        // check, if all the variations are empty
-        if (  !(  (variation.betVariationName.value.trim() === "") && (variation.betVariationOdds.value.trim() === "")  )  ) {
-            isEmpty = false;
-        }
     }
     }
+    
     // if all the variations are empty, delete the whole bet
     if (isEmpty) {
         deleteBet();
+        return;
     }
 
     // create a variable to store the whole data in (not just the one bet) to be uploaded to the database
     let editedData = obtainedData.record;
 
     // go through all the bet variations that are supposed to be removed from the user bets
-    toBeCleared[1].map((item) => {
+    toBeCleared.betVariations.map((item) => {
         // iterate ove all the betters
         obtainedData.record.game.betters.map((better, betterIndex) => {
             // iterate over all the bet variations of a single better
             better.userBets.map((bet, betIndex) => {
                 // if the current variation matches the sought one, delete it
-                if (bet.bet === toBeCleared[0] && bet.betVariation === item) {
+                if (bet.bet === toBeCleared.betName && bet.betVariation === item) {
                     editedData.game.betters[betterIndex].userBets.splice(betIndex, 1);
                 }
             })
@@ -279,7 +296,7 @@ async function deleteBet () {
     const betName = obtainedData.record.game.betsData.bets[betIndex].betName;
 
     // remove the current bet from the new data to be sent
-    editedData.game.betsData.bets.splice(betIndex, 1);    
+    editedData.game.betsData.bets.splice(betIndex, 1);
 
     // delete all the user bet variations that were made with the current bet (that is getting deleted)
     for (let _better = obtainedData.record.game.betters.length - 1; _better >= 0; _better--) {
@@ -339,7 +356,6 @@ async function putDataAPI(dataToSend) {
             };
         const response = await fetch(urlAPI, options);
         const data = await response.json();
-        console.log("PUT request successful:", data);
         return data;
     }
     catch (error) {
