@@ -2,49 +2,38 @@
 <html>
     <head>
         <title>HJUMENbet • Bets</title>
-        <link rel="icon" type="image/x-icon" href="..\hjumenbet\logo\hjumenbet_icon.ico">
+        <link rel="icon" type="image/x-icon" href="\logo\hjumenbet_icon.ico">
         <link rel="stylesheet" href="style\\betsStyle.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     </head>
     <body>      
         <nav>
             <div class = "navbarButtonOutline">
-                <button class = "navbarButton" onclick = "window.location.href = '\createBet.html'">
-                    <img src="..\hjumenbet\icons\create.png" class = "navbarButtonIcon">
-                    <span class = "label">Create new bet</span>
+                <button class = "navbarButton" onclick = "window.location.href = 'createBet.html'">
+                    <img src="..\\icons\\create.png" class = "navbarButtonIcon">
+                    <label class = "label labelHide pointer">Create new bet</label>
                 </button>
             </div>
             <div class = "navbarButtonOutline">
                 <button class = "navbarButton">
-                    <img src="..\hjumenbet\icons\user.png" class = "navbarButtonIcon">
-                    <span id = "userEmail" class = "label">email</span>
+                    <img src="..\\icons\\user.png" class = "navbarButtonIcon">
+                    <label id = "userEmail" class = "label labelHide pointer">email</label>
                 </button>
             </div>
         </nav>
-
-
-
-
-
-
         <h1>Today's bets</h1>
-
         <main id = "betsCont">
-        
         </main>
-
-
-
-
-
-
         <aside>
-            <button id = "saveBets" onclick = "saveBets()">
-                <img src="..\hjumenbet\icons\save.png" class = "navbarButtonIcon">
-                <span>Save changes</span>
+            <button id = "saveBets" onclick = "saveBets()" class = "navbarButtonOutline">
+                <img src="..\\icons\\save.png" class = "navbarButtonIcon">
+                <label class = "label labelHide pointer">Save changes</label>
             </button>
+            <div class = "navbarButtonOutline" id = "currentBetAmount">
+                <label class = "label">Current bet amount:</label>
+                <span id = "userBetAmount">-- Kč</span>
+            </div>
         </aside>
-        <script src = "..\hjumenbet\script\betsScript.js"></script>
+        <script src = "\script\betsScript.js"></script>
     </body>
 </html>
