@@ -1,0 +1,61 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(255, 248, 241);
+}
+
+h1 {
+    margin: 0;
+}
+
+main {
+    transform: scale(1.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background-color: rgb(218, 209, 200);
+    border-radius: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 15px;
+    background-color: rgb(189, 181, 170);
+    border-radius: 15px;
+    width: 200px;
+    align-items: center;
+    box-sizing: border-box;
+}   
+
+input {
+    background-color: rgb(160, 147, 128);
+    border: none;
+    padding: 5px 7px;
+    border-radius: 10px;
+    width: 100%; /* Make inputs stretch across the form */
+    box-sizing: border-box; /* Include padding and border in the input's width */
+}
+
+input::placeholder {
+    color: rgb(100, 89, 74);
+    opacity: 1;
+}
+
+button {
+    background-color: rgb(139, 124, 100);
+    border: none;
+    padding: 5px 7px 5px 7px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: black;
+    width: 80px;
+}
+
