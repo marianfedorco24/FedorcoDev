@@ -9,7 +9,6 @@ function logIn(event) {
 
     if (email === "" | pass === "") {
         alert("Enter your full login information.");
-        console.log("User didn't input all the necessary login information.");
         return;
     }
 
@@ -21,15 +20,13 @@ function logIn(event) {
 
         let isLoginValid = false;
         // Loop through logins and check for valid credentials
-        console.log(obtainedData)
         for (let user of obtainedData.record.logins) {
             if (email === user[0] && pass === user[1]) {
-                console.log("Correct credentials.");
                 isLoginValid = true;
 
                 sessionStorage.setItem("isLoggedIn", "true"); //save the fact that the user is logged in
                 sessionStorage.setItem("email", email);
-                window.location.href = "..\\hjumenbet\\bets.html"; //redirect
+                window.location.href = "..\\bets.html"; //redirect
 
                 break; // Exit loop once credentials are found
             }
@@ -38,7 +35,6 @@ function logIn(event) {
         // If no valid login was found, alert for invalid credentials
         if (!isLoginValid) {
             alert("Invalid credentials");
-            console.log("Invalid credentials.");
         }
 
     })();
