@@ -64,6 +64,7 @@ table {
     border-radius: 15px;
     border-collapse: separate;
     border-spacing: 0 10px;
+    box-sizing: border-box;
 }
 
 
