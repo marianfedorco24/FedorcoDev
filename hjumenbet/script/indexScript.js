@@ -26,7 +26,7 @@ function logIn(event) {
 
                 sessionStorage.setItem("isLoggedIn", "true"); //save the fact that the user is logged in
                 sessionStorage.setItem("email", email);
-                window.location.href = "..\\bets.html"; //redirect
+                window.location.href = "../hjumenbet/bets.html"; //redirect
 
                 break; // Exit loop once credentials are found
             }
