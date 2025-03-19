@@ -3,7 +3,7 @@ const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 // check, whether the user is actually logged in
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '..\\index.html'; // Redirect to login if not logged in
+    window.location.href = '../hjumenbet/index.html'; // Redirect to login if not logged in
 }
 
 // get the current user's email
@@ -54,7 +54,7 @@ const main = document.querySelector("main");
 
         //     create the edit button
         const editButton = document.createElement("img");
-        editButton.src = "icons/edit.png";
+        editButton.src = "../hjumenbet/icons/edit.png";
         editButton.id = `editButton${currentBetIndex}`;
         editButton.classList.add("editButton", "pointer");
         editButton.addEventListener("click", (e) => {edit(e)});
@@ -141,7 +141,7 @@ const main = document.querySelector("main");
 
             //         create a add button
             const addButton = document.createElement("img");
-            addButton.src = "icons/add.png";
+            addButton.src = "../hjumenbet/icons/add.png";
             addButton.id = `addButton${currentBetIndex}_${currentVariationIndex}`;
             addButton.classList.add("addSubtractButton")
             addButton.addEventListener("click", (e) => {userBetAdd(e)});
@@ -149,7 +149,7 @@ const main = document.querySelector("main");
 
             //         create a subtract button
             const subtractButton = document.createElement("img");
-            subtractButton.src = "icons/subtract.png";
+            subtractButton.src = "../hjumenbet/icons/subtract.png";
             subtractButton.id = `subtractButton${currentBetIndex}_${currentVariationIndex}`;
             subtractButton.classList.add("addSubtractButton")
             subtractButton.addEventListener("click", (e) => {userBetSubtract(e)});
@@ -202,7 +202,7 @@ async function saveBets () {
         }
         alert("Your bets were updated succesfully!");
 
-        window.location.href = "..\\bets.html"; //redirect
+        window.location.href = "../hjumenbet/bets.html"; //redirect
     })();
 }
 
@@ -250,7 +250,7 @@ async function putDataAPI(dataToSend) {
 function edit (event) {
     const editIndex = event.target.id.slice(-1);
     sessionStorage.setItem("betIndex", editIndex);
-    window.location.href = "..\\editBet.html";
+    window.location.href = "../hjumenbet/editBet.html";
 }
 
 function userBetAdd (event) {
