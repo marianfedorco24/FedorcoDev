@@ -2,7 +2,7 @@ const urlAPI = "https://api.jsonbin.io/v3/b/67b627cbacd3cb34a8e889c7";
 const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '..\\index.html'; // Redirect to login if not logged in
+    window.location.href = '../hjumenbet/index.html'; // Redirect to login if not logged in
 }
 
 const userEmail = sessionStorage.getItem("email");
@@ -63,7 +63,7 @@ function newRow () {
     newRowTr.appendChild(variationClearButtonTd);
 
     betVariationsObj[newElementIndex].variationClearButton = document.createElement("img");
-    betVariationsObj[newElementIndex].variationClearButton.src = "..\\icons\\clear.png";
+    betVariationsObj[newElementIndex].variationClearButton.src = "../hjumenbet/icons/clear.png";
     betVariationsObj[newElementIndex].variationClearButton.id = `variationClearButton${newElementIndex + 1}`;
     variationClearButtonTd.appendChild(betVariationsObj[newElementIndex].variationClearButton);
 
@@ -144,7 +144,7 @@ function submitFc () {
             return; // Handle error case
         }
         alert("Data updated successfully!");
-        window.location.href = "..\\bets.html";
+        window.location.href = "../hjumenbet/bets.html";
     })();
 }
 
