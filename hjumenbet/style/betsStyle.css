@@ -156,6 +156,9 @@ input {
 tbody tr td:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    word-wrap: break-word; /* Allows breaking only when necessary */
+    overflow-wrap: break-word; /* Ensures words break on overflow */
+    white-space: normal; /* Allows wrapping */
 }
 
 /* Round the right edge of the last cell in each row */
