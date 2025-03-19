@@ -2,7 +2,7 @@ const urlAPI = "https://api.jsonbin.io/v3/b/67b627cbacd3cb34a8e889c7";
 const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '..\\index.html'; // Redirect to login if not logged in
+    window.location.href = '../hjumenbet/index.html'; // Redirect to login if not logged in
 }
 
 const userEmail = sessionStorage.getItem("email");
@@ -117,7 +117,7 @@ function newRow (variation, variationIndex, isValueNeeded) {
     variationRow.appendChild(clearButtonTd);
 
     const clearButton = document.createElement("img");
-    clearButton.src = "..\\icons\\clear.png";
+    clearButton.src = "../hjumenbet/icons/clear.png";
     clearButton.classList.add("clearButton", "pointer");
     clearButton.id = `clearButton${variationIndex}`;
     clearButton.addEventListener("click", ("click", (e) => {clearInputs(e)}));
@@ -278,7 +278,7 @@ async function saveChanges () {
             return; // Handle error case
         }
         //move to the main page
-        window.location.href = "..\\bets.html";
+        window.location.href = "../hjumenbet/bets.html";
 }
 
 // function to delete the whole bet
@@ -321,7 +321,7 @@ async function deleteBet () {
         return; // Handle error case
     }
     // go to the main page
-    window.location.href = "..\\bets.html";
+    window.location.href = "../bets.html";
 }
 
 // Function to obtain the data from an API
