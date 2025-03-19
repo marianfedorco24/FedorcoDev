@@ -39,6 +39,7 @@ section {
     padding: 20px;
     background-color: rgb(218, 209, 200);
     border-radius: 20px;
+    box-sizing: border-box;
 }
 
 h2 {
