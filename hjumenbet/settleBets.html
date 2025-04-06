@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HJUMENbet • Settle bets</title>
+        <link rel="icon" type="image/x-icon" href="logo/hjumenbet_icon.ico">
+        <link rel="stylesheet" href="style/settleBetsStyle.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>      
+        <nav>
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton" onclick = "window.location.href = 'bets.html'">
+                    <img src="icons/home.png" class = "navbarButtonIcon">
+                    <label class = "label labelHide pointer">Home</label>
+                </button>
+            </div>
+            <div class = "navbarButtonOutline">
+                <button class = "navbarButton">
+                    <img src="icons/user.png" class = "navbarButtonIcon">
+                    <label id = "userEmail" class = "label labelHide pointer">email</label>
+                </button>
+            </div>
+        </nav>
+        <h1>Settle bets</h1>
+        <p>Select the winning bet variations, or select if there are none for the bets you like and calculate the users' winnings.</p>
+        <main id = "betsCont"></main>
+        <aside>
+            <button id = "settleBets" onclick = "settleBets()" class = "navbarButtonOutline">
+                <img src="icons/save.png" class = "navbarButtonIcon">
+                <span class = "label labelHide pointer">Settle selected bets</span>
+            </button>
+        </aside>
+        <script src = "script/settleBetsScript.js"></script>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="logo/hjumenbet_icon.ico">
+    <link rel="stylesheet" href="style/payoutsStyle.css">
+    <title>HJUMENbet • User payouts</title>
+</head>
+<body>
+    <nav>
+        <div class = "navbarButtonOutline">
+            <button class = "navbarButton" onclick = "window.location.href = 'bets.html'">
+                <img src="icons/home.png" class = "navbarButtonIcon">
+                <label class = "label labelHide pointer">Home</label>
+            </button>
+        </div>
+        <div class = "navbarButtonOutline">
+            <button class = "navbarButton">
+                <img src="icons/user.png" class = "navbarButtonIcon">
+                <label id = "userEmail" class = "label labelHide pointer">email</label>
+            </button>
+        </div>
+    </nav>
+
+    <h1>Pay the users out</h1>
+    <main>
+        <select id = "select"></select>
+        <div id = "userStatsCont">
+            <table id = "table">
+                <thead>
+                    <tr>
+                        <td>Bet</td>
+                        <td>Bet variation</td>
+                        <td>User's winning</td>
+                    </tr>
+                </thead>
+                <tbody id = "tableBody"></tbody>
+            </table>
+            <span id = "toBePaid">To be paid: -- Kč</span>
+        </div>
+        <button id = "userPaidButton" onclick = "userPaidButtonFc()">User has been paid</button>
+    </main>
+    <script src="script/payoutsScript.js"></script>
+</body>
+</html>
