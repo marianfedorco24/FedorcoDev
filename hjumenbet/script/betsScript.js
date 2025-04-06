@@ -3,7 +3,7 @@ const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 // check, whether the user is actually logged in
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '../hjumenbet/index.html'; // Redirect to login if not logged in
+    window.location.href = 'index.html'; // Redirect to login if not logged in
 }
 
 // get the current user's email
@@ -15,6 +15,9 @@ userEmailSpan.innerHTML = userEmail;
 const userBetAmountSpan = document.getElementById("userBetAmount");
 let userIndex;
 const main = document.querySelector("main");
+const payoutsButton = document.getElementById("payoutsButton");
+const winningsButton = document.getElementById("winningsButton");
+const settleBetsButton = document.getElementById("settleBetsButton");
 
 (async () => {
     // get the data from the database
@@ -24,19 +27,47 @@ const main = document.querySelector("main");
         }
     const betsData = structuredClone(obtainedData.record.game.betsData);
     const betters = structuredClone(obtainedData.record.game.betters);
-    
+
     // get the current user's index in betters
     userIndex = betters.findIndex(better => better.email === userEmail);
 
+    // check the user's permissions and based on that show appropriate buttons
+    if (obtainedData.record.users[userIndex].role === "moderator" | obtainedData.record.users[userIndex].role === "admin") {
+        // if there are some settled bets, show the payouts button
+        if (betsData.settledBets.length !== 0) {
+            payoutsButton.style.display = "block";
+        }
+        settleBetsButton.style.display = "block";
+    }
+
+    // if the user has some settled bets, show the Winnings button
+    let userhasSettledBets = false;
+    betters[userIndex].userBets.map((userBet, userBetIndex) => {
+        // go through each user's bets and check, whether it has been settled
+        let currentBetSettledIndex = betsData.settledBets.findIndex(settledBet => settledBet.betName === userBet.bet);
+
+        // here I divide the user's bets by whether they are settled or not
+        if (currentBetSettledIndex !== -1) {
+            userhasSettledBets = true;
+        }
+    })
+
+    if (userhasSettledBets) {
+        winningsButton.style.display = "block";
+    }
+
     // set the user's current bet amount
     let userBetAmount = 0;
-    betters[userIndex].userBets.map((userBet, userBetIndex) => {
-        userBetAmount += Number(userBet.betAmount);
-    })
+    for (section of main.children) {
+        for (variation of section.lastChild.lastChild) {
+            userBetAmount += Number(variation.lastChild.firstChild.firstChild.firstChild.value);
+        }
+    }
+
     userBetAmountSpan.innerHTML = `${userBetAmount} Kč`;
 
     // go through each created bets
-    betsData.bets.map((currentBet, currentBetIndex) => {
+    betsData.currentBets.map((currentBet, currentBetIndex) => {
         // create the section for a bet
         const section = document.createElement("section");
         main.appendChild(section);
@@ -54,7 +85,7 @@ const main = document.querySelector("main");
 
         //     create the edit button
         const editButton = document.createElement("img");
-        editButton.src = "../hjumenbet/icons/edit.png";
+        editButton.src = "icons/edit.png";
         editButton.id = `editButton${currentBetIndex}`;
         editButton.classList.add("editButton", "pointer");
         editButton.addEventListener("click", (e) => {edit(e)});
@@ -90,7 +121,7 @@ const main = document.querySelector("main");
         variationsTable.appendChild(tableBody);
 
         // go through each bet variations
-        currentBet.betVariationsAll.betVariations.map((currentVariation, currentVariationIndex) => {
+        currentBet.betVariations.map((currentVariation, currentVariationIndex) => {
             // create a row for the current variation
             const variationRow = document.createElement("tr");
             tableBody.appendChild(variationRow);
@@ -141,7 +172,7 @@ const main = document.querySelector("main");
 
             //         create a add button
             const addButton = document.createElement("img");
-            addButton.src = "../hjumenbet/icons/add.png";
+            addButton.src = "icons/add.png";
             addButton.id = `addButton${currentBetIndex}_${currentVariationIndex}`;
             addButton.classList.add("addSubtractButton")
             addButton.addEventListener("click", (e) => {userBetAdd(e)});
@@ -149,7 +180,7 @@ const main = document.querySelector("main");
 
             //         create a subtract button
             const subtractButton = document.createElement("img");
-            subtractButton.src = "../hjumenbet/icons/subtract.png";
+            subtractButton.src = "icons/subtract.png";
             subtractButton.id = `subtractButton${currentBetIndex}_${currentVariationIndex}`;
             subtractButton.classList.add("addSubtractButton")
             subtractButton.addEventListener("click", (e) => {userBetSubtract(e)});
@@ -158,7 +189,7 @@ const main = document.querySelector("main");
 
             // set the user's bet amounts
             betters[userIndex].userBets.map((variation, variationIndex) => { // go through the user's bets
-                if ((variation.bet === betsData.bets[currentBetIndex].betName) && (variation.betVariation === betsData.bets[currentBetIndex].betVariationsAll.betVariations[currentVariationIndex].betVariationName)) { // if it matches the current element that is being created:
+                if ((variation.bet === betsData.currentBets[currentBetIndex].betName) && (variation.betVariation === betsData.currentBets[currentBetIndex].betVariations[currentVariationIndex].betVariationName)) { // if it matches the current element that is being created:
                     bettedAmountInput.value = variation.betAmount; // asign the bet value
                 }
             })
@@ -178,10 +209,14 @@ async function saveBets () {
 
     const thisUserBetIndex = betters.findIndex(better => better.email === userEmail);
 
+    // this is the array for the new user bets
     let newUserBets = [];
 
+    // go through all bets visible
     Array.from(main.children).map((currentBet, currentBetIndex) => {
+        // go through all the variations of the current bet
         Array.from(currentBet.lastChild.lastChild.children).map((currentVariation, currentVariationIndex) => {
+            // if the user betted in the current variation, add it to the newUserBets array
             if (currentVariation.lastChild.firstChild.firstChild.firstChild.value !== undefined && currentVariation.lastChild.firstChild.firstChild.firstChild.value !== "0") {
                 newUserBets.push({
                     bet: currentBet.firstChild.firstChild.innerHTML,
@@ -193,7 +228,20 @@ async function saveBets () {
     })
 
     let newData = structuredClone(cleanData);
-    newData.game.betters[thisUserBetIndex].userBets = newUserBets;
+
+    let oldUserBets = newData.game.betters[thisUserBetIndex].userBets;
+
+    // go through all the old user bets
+    for (let currentOldUserBetIndex = oldUserBets.length - 1; currentOldUserBetIndex >= 0; currentOldUserBetIndex --) {
+        // check, whether the current old user bet is present in the new one
+        if (newUserBets.find(currentNewUserBet => currentNewUserBet.bet === oldUserBets[currentOldUserBetIndex].bet && currentNewUserBet.betVariation === oldUserBets[currentOldUserBetIndex].betVariation) !== undefined) {
+            // if yes, delete it from the old list
+            oldUserBets.splice(currentOldUserBetIndex, 1);
+        }
+    }
+
+    // join the two lists Ferenc Liszt
+    newData.game.betters[thisUserBetIndex].userBets = oldUserBets.concat(newUserBets);
     
     (async () => {
         const result = await putDataAPI(newData);
@@ -202,7 +250,7 @@ async function saveBets () {
         }
         alert("Your bets were updated succesfully!");
 
-        window.location.href = "../hjumenbet/bets.html"; //redirect
+        window.location.href = "bets.html"; //redirect
     })();
 }
 
@@ -250,7 +298,7 @@ async function putDataAPI(dataToSend) {
 function edit (event) {
     const editIndex = event.target.id.slice(-1);
     sessionStorage.setItem("betIndex", editIndex);
-    window.location.href = "../hjumenbet/editBet.html";
+    window.location.href = "editBet.html";
 }
 
 function userBetAdd (event) {
