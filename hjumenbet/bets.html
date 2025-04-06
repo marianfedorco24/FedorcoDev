@@ -11,13 +11,35 @@
             <div class = "navbarButtonOutline">
                 <button class = "navbarButton" onclick = "window.location.href = 'createBet.html'">
                     <img src="icons/create.png" class = "navbarButtonIcon">
-                    <label class = "label labelHide pointer">Create new bet</label>
+                    <span class = "label labelHide pointer">Create new bet</span>
                 </button>
             </div>
+
+            <div class="navbarButtonOutline" id = "winningsButton">
+                <button class="navbarButton" onclick="window.location.href = 'winnings.html'">
+                    <img src="icons/calculate.png" class="navbarButtonIcon">
+                    <span class="label labelHide pointer">Winnings</span>
+                </button>
+            </div>
+
+            <div class="navbarButtonOutline" id = "settleBetsButton">
+                <button class="navbarButton" onclick="window.location.href = 'settleBets.html'">
+                    <img src="icons/stop.png" class="navbarButtonIcon">
+                    <span class="label labelHide pointer">Settle bets</span>
+                </button>
+            </div>
+
+            <div class="navbarButtonOutline" id = "payoutsButton">
+                <button class="navbarButton" onclick="window.location.href = 'payouts.html'">
+                    <img src="icons/payouts.png" class="navbarButtonIcon">
+                    <span class="label labelHide pointer">User payouts</span>
+                </button>
+            </div>
+
             <div class = "navbarButtonOutline">
                 <button class = "navbarButton">
                     <img src="icons/user.png" class = "navbarButtonIcon">
-                    <label id = "userEmail" class = "label labelHide pointer">email</label>
+                    <span id = "userEmail" class = "label labelHide pointer">email</span>
                 </button>
             </div>
         </nav>
@@ -27,10 +49,10 @@
         <aside>
             <button id = "saveBets" onclick = "saveBets()" class = "navbarButtonOutline">
                 <img src="icons/save.png" class = "navbarButtonIcon">
-                <label class = "label labelHide pointer">Save changes</label>
+                <span class = "label labelHide pointer">Save changes</span>
             </button>
             <div class = "navbarButtonOutline" id = "currentBetAmount">
-                <label class = "label">Current bet amount:</label>
+                <span class = "label">Current bet amount:</span>
                 <span id = "userBetAmount">-- Kč</span>
             </div>
         </aside>
