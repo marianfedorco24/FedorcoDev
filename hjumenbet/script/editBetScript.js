@@ -2,7 +2,7 @@ const urlAPI = "https://api.jsonbin.io/v3/b/67b627cbacd3cb34a8e889c7";
 const keyAPI = "$2a$10$Xt2Y7JEnOA.yvHPb5DD7UO3oSH9UKc5yG/dTYC0.cDYl8EZeLmTnS";
 
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = '../hjumenbet/index.html'; // Redirect to login if not logged in
+    window.location.href = 'index.html'; // Redirect to login if not logged in
 }
 
 const userEmail = sessionStorage.getItem("email");
@@ -16,6 +16,7 @@ const betIndex = Number(sessionStorage.getItem("betIndex"));
 const main = document.querySelector("main");
 const variationsContainer = document.getElementById("variationsContainer");
 const tbody = document.querySelector("tbody");
+const betNameInput = document.getElementById("betName");
 
 // create an array to store the deleted bet variations that are to be deleted form the user bets array in the database
 let toBeCleared = {
@@ -36,21 +37,20 @@ let toBeCleared = {
     // set some variables
     const cleanData = structuredClone(obtainedData.record);
     const betsData = structuredClone(cleanData.game.betsData);
-    const betNameInput = document.getElementById("betName");
 
     // set the betname input
-    betNameInput.value = betsData.bets[betIndex].betName;
+    betNameInput.value = betsData.currentBets[betIndex].betName;
 
     // save the betName to the toBeCleared array
-    toBeCleared.betName = betsData.bets[betIndex].betName;
+    toBeCleared.betName = betsData.currentBets[betIndex].betName;
 
     // create a table row for each betVariation
-    betsData.bets[betIndex].betVariationsAll.betVariations.map((variation, variationIndex) => {
+    betsData.currentBets[betIndex].betVariations.map((variation, variationIndex) => {
         newRow(variation, variationIndex, true);
     })
 
     // create the extra row
-    const newRowIndex = betsData.bets[betIndex].betVariationsAll.betVariations.length;
+    const newRowIndex = betsData.currentBets[betIndex].betVariations.length;
     newRow(null, newRowIndex, false);
 
     // locate the save and delete buttons
@@ -117,7 +117,7 @@ function newRow (variation, variationIndex, isValueNeeded) {
     variationRow.appendChild(clearButtonTd);
 
     const clearButton = document.createElement("img");
-    clearButton.src = "../hjumenbet/icons/clear.png";
+    clearButton.src = "icons/clear.png";
     clearButton.classList.add("clearButton", "pointer");
     clearButton.id = `clearButton${variationIndex}`;
     clearButton.addEventListener("click", ("click", (e) => {clearInputs(e)}));
@@ -190,9 +190,7 @@ async function saveChanges () {
     // create an object to store the new edited bet into
     let editedBet = {
         betName: betName.value,
-        betVariationsAll: {
-            betVariations: []
-        }
+        betVariations: []
     };
     
     // check if the bet name is missing
@@ -211,7 +209,7 @@ async function saveChanges () {
         // check if the row is empty
         if (currentRowTds[0].firstChild.value.trim() === "" && currentRowTds[1].firstChild.value.trim() === "") {
             try {
-                toBeCleared.betVariations.push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName);
+                toBeCleared.betVariations.push(obtainedData.record.game.betsData.currentBets[betIndex].betVariations[rowIndex].betVariationName);
             }
             catch {
                 continue; // Skip to next row
@@ -230,14 +228,14 @@ async function saveChanges () {
             isEmpty = false;
 
             // if the current variation is not new, check, if it`s name was changed... without checking whether it`s new, we get an error, because js wouldn`t be able to access it
-            if (!(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations.length < (rowIndex + 1))) {
+            if (!(obtainedData.record.game.betsData.currentBets[betIndex].betVariations.length < (rowIndex + 1))) {
                 // if the current variation`s name was changed, add it to the toBeCleared array
-                if (currentRowTds[0].firstChild.value.trim() !== obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName) {
-                    toBeCleared.betVariations.push(obtainedData.record.game.betsData.bets[betIndex].betVariationsAll.betVariations[rowIndex].betVariationName);
+                if (currentRowTds[0].firstChild.value.trim() !== obtainedData.record.game.betsData.currentBets[betIndex].betVariations[rowIndex].betVariationName) {
+                    toBeCleared.betVariations.push(obtainedData.record.game.betsData.currentBets[betIndex].betVariations[rowIndex].betVariationName);
                 }
             }
             // add the variation to the object to be sent
-            editedBet.betVariationsAll.betVariations.push({
+            editedBet.betVariations.push({
                 betVariationName: currentRowTds[0].firstChild.value.trim(),
                 betVariationOdds: currentRowTds[1].firstChild.value.trim(),
                 userBet: 0
@@ -269,8 +267,19 @@ async function saveChanges () {
         })
     })
 
+    // check whether the bet name was changed... if yes, change the name in user bets
+    if (obtainedData.record.game.betsData.currentBets[betIndex].betName !== betNameInput.value.trim()) {
+        obtainedData.record.game.betters.map((better, betterIndex) => {
+            better.userBets.map((userBet, userBetIndex) => {
+                if (userBet.bet === obtainedData.record.game.betsData.currentBets[betIndex].betName) {
+                    editedData.game.betters[betterIndex].userBets[userBetIndex].bet = betNameInput.value.trim();
+                }
+            })
+        })
+    }
+
     // join the two new objects to form an object to be sent to the database
-    editedData.game.betsData.bets[betIndex] = editedBet;
+    editedData.game.betsData.currentBets[betIndex] = editedBet;
 
     // upload the new data to the database
     const result = await putDataAPI(editedData);
@@ -278,7 +287,7 @@ async function saveChanges () {
             return; // Handle error case
         }
         //move to the main page
-        window.location.href = "../hjumenbet/bets.html";
+        window.location.href = "bets.html";
 }
 
 // function to delete the whole bet
@@ -293,10 +302,10 @@ async function deleteBet () {
     let editedData = obtainedData.record;
 
     // get the name of the current bet
-    const betName = obtainedData.record.game.betsData.bets[betIndex].betName;
+    const betName = obtainedData.record.game.betsData.currentBets[betIndex].betName;
 
     // remove the current bet from the new data to be sent
-    editedData.game.betsData.bets.splice(betIndex, 1);
+    editedData.game.betsData.currentBets.splice(betIndex, 1);
 
     // delete all the user bet variations that were made with the current bet (that is getting deleted)
     for (let _better = obtainedData.record.game.betters.length - 1; _better >= 0; _better--) {
@@ -321,7 +330,7 @@ async function deleteBet () {
         return; // Handle error case
     }
     // go to the main page
-    window.location.href = "../bets.html";
+    window.location.href = "bets.html";
 }
 
 // Function to obtain the data from an API
