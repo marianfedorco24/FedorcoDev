@@ -229,3 +229,7 @@ input[type="number"]::-webkit-outer-spin-button {
         width: 100%;
     }
 }
+
+#payoutsButton, #winningsButton, #settleBetsButton {
+    display: none;
+}
