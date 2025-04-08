@@ -56,16 +56,6 @@ const settleBetsButton = document.getElementById("settleBetsButton");
         winningsButton.style.display = "block";
     }
 
-    // set the user's current bet amount
-    let userBetAmount = 0;
-    for (section of main.children) {
-        for (variation of section.lastChild.lastChild) {
-            userBetAmount += Number(variation.lastChild.firstChild.firstChild.firstChild.value);
-        }
-    }
-
-    userBetAmountSpan.innerHTML = `${userBetAmount} Kč`;
-
     // go through each created bets
     betsData.currentBets.map((currentBet, currentBetIndex) => {
         // create the section for a bet
@@ -196,6 +186,17 @@ const settleBetsButton = document.getElementById("settleBetsButton");
         })
         }
     )
+
+    // set the user's current bet amount
+    let userBetAmount = 0;
+    for (const section of main.children) {
+        console.log(section)
+        for (const variation of section.lastChild.lastChild.children) {
+            userBetAmount += Number(variation.lastChild.firstChild.firstChild.firstChild.value);
+            
+        }
+    }
+    userBetAmountSpan.innerHTML = `${userBetAmount} Kč`;
 }
 )();
 
