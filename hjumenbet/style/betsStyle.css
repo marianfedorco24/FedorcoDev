@@ -180,11 +180,6 @@ tbody tr td:last-child {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-}
-
-.addSubtractCont {
-    width: 82%;
 }
 
 tr :nth-child(2) {
