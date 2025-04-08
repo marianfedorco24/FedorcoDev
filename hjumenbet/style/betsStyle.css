@@ -163,23 +163,19 @@ tbody tr td:first-child {
 tbody tr td {
     padding: 10px;  /* Adds padding inside cells */
     background-color: rgb(165, 158, 149);  /* Same as tr background */
-    vertical-align: middle;
-    align-items: center;
-    justify-content: center;
 }
 
 /* Round the right edge of the last cell in each row */
 tbody tr td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    width: 0px;
+    width: 0;
 }
 
 .addSubtractCont, .bettedAmountAmountCont {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
 }
 
 tr :nth-child(2) {
@@ -214,9 +210,9 @@ input[type="number"]::-webkit-outer-spin-button {
     background-color: rgb(136, 129, 120);
     padding: 10px;
     border-radius: 10px;
-    align-items: center;
     justify-content: center;
-    width: 0;
+    align-items: center;
+    width: fit-content;
 }
 
 
