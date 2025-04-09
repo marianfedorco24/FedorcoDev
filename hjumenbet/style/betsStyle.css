@@ -225,3 +225,9 @@ input[type="number"]::-webkit-outer-spin-button {
 #payoutsButton, #winningsButton, #settleBetsButton {
     display: none;
 }
+
+td:last-child, th:last-child {
+  width: 1%; /* encourages the column to shrink */
+  white-space: nowrap; /* prevents line breaks, helps content fit tightly */
+}
+
