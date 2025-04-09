@@ -39,7 +39,6 @@ section {
     padding: 20px;
     background-color: rgb(218, 209, 200);
     border-radius: 20px;
-    overflow: auto;
 }
 
 h2 {
@@ -170,6 +169,9 @@ tbody tr td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .addSubtractCont, .bettedAmountAmountCont {
@@ -225,9 +227,3 @@ input[type="number"]::-webkit-outer-spin-button {
 #payoutsButton, #winningsButton, #settleBetsButton {
     display: none;
 }
-
-td:last-child, th:last-child {
-  width: 1%; /* encourages the column to shrink */
-  white-space: nowrap; /* prevents line breaks, helps content fit tightly */
-}
-
