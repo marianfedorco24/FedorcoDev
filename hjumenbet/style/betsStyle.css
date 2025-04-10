@@ -62,7 +62,6 @@ table {
     border-radius: 15px;
     border-collapse: separate;
     border-spacing: 0 10px;
-    max-width: 100%;
     table-layout: auto;
 }
 
