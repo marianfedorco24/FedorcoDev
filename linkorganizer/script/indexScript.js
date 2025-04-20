@@ -80,9 +80,10 @@ async function deleteItem () {
 
     let type = "link";
 
-    if (currentItemNode.target.parentNode.parentNode.children[0].firstChild.src.split("/").at(-1) === "folder.png") {
+    if (currentItemNode.target.parentNode.parentNode.children[0].firstChild.src.split("/").at(-2) === "folder") {
         type = "folder";
     }
+    
     const currentItemIndex = eval(`${getCurrDirObjPath()}.findIndex(item => item.name === itemName && item.type === type)`);
 
     eval(`${getCurrDirObjPath()}.splice(currentItemIndex, 1)`);
