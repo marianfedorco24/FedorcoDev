@@ -48,6 +48,7 @@ main {
 
 button {
     width: 100%;
+    color: #1e1e1e;
 }
 
 #nav {
@@ -85,7 +86,7 @@ tr {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    width: 75%;
+    width: max-content;
 }
 
 h1 {
@@ -125,8 +126,6 @@ tr :nth-child(2) {
     vertical-align: middle;
 }
 
-
-
 #deleteButton {
     width: 20px;
     position: fixed;
@@ -145,12 +144,13 @@ tr :nth-child(2) {
 
 .iconPicker {
     overflow-y: auto;
-    border: 1px solid #ccc;
     padding: 10px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(3em, 1fr));
     gap: 1em;
     box-sizing: border-box;
+    background-color: #d3d3d3;
+    border-radius: 20px;
 }
 
 .icon {
@@ -161,6 +161,7 @@ tr :nth-child(2) {
     padding: 7px;
     border-radius: 10px;
     box-sizing: border-box;
+    background-color: #cac9c9;
 }
 
 .toggledIcon {
@@ -195,6 +196,11 @@ input, #newFolderInput {
     border-radius: 10px;
     width: 100%;
     box-sizing: border-box;
+    
+}
+
+input::placeholder {
+  color: rgb(119, 119, 119);
 }
 
 .newFolderButton, .newLinkButton, .editFolderButton {
