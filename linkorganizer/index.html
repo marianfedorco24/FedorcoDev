@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "style/indexStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <title>Link tree</title>
+</head>
+<body>
+    <main>
+        <div id = "nav">
+            <img src = "icons/arrow_back.png" id = "arrowBack" onclick = "prevDir()">
+            <span id = "pathSpan">...</span>
+        </div>
+        <table>
+            <tbody></tbody>
+        </table>
+
+
+        <div id = "buttonsCont">
+            <button id = "newFolderButton" onclick = "showNewFolderWindow()" class = "creationButton">New folder</button>
+            <button id = "newLinkButton" onclick = "showNewLinkWindow()" class = "creationButton">New link</button>
+        </div>
+
+
+    </main>
+
+    <div id = "newFolderPopUpWrapper" class = "windowWrapper">
+        <section id = newFolderSection class = "windowSection">
+            <h1>New folder</h1>
+            <input placeholder = "Folder name" id = "newFolderInput">
+            <div id = "newFolderIconPickerCont" class = "iconPicker"></div>
+            <div class = "buttonsDiv">
+                <button id = "createButton" class = "newFolderButton" onclick = "createNewFolder()">Create</button>
+                <button onclick = "newFolderPopUpHide()" class = "newFolderButton cancelButton">Cancel</button>
+            </div>
+        </section>
+    </div>
+
+    <div id = "newLinkPopUpWrapper" class = "windowWrapper">
+        <section id = newLinkSection class = "windowSection">
+            <h1>New link</h1>
+            <input placeholder = "Title" id = "newLinkNameInput">
+            <input placeholder = "Url" id = "newLinkUrlInput">
+            <div id = "newLinkIconPickerCont" class = "iconPicker"></div>
+            <div class="buttonsDiv">
+                <button id = "createButton" class = "newLinkButton" onclick = "createNewLink()">Create</button>
+                <button onclick = "newLinkPopUpHide()" class = "newLinkButton cancelButton">Cancel</button>
+            </div>
+        </section>
+    </div>
+
+    <div id = "editWindowWrapper" class = "windowWrapper">
+        <section id = editSection class = "windowSection">
+            <h1 id = "editWindowHeading">Edit link</h1>
+            <img src="icons/delete.png" id = "deleteButton" onclick = "deleteItem()">
+            <input placeholder = "title" id = "editNameInput">
+            <input placeholder = "url" id = "editUrlInput">
+            <div id = "editItemIconPickerCont" class = "iconPicker"></div>
+            <div class = "buttonsDiv">
+                <button id = "editButtonConfirm" class = "editFolderButton" onclick = "confirmFolderEdit()">Confirm</button>
+                <button onclick = "hideEditItemWindow()" class = "editFolderButton cancelButton">Cancel</button>
+            </div>
+        </section>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src = "script/indexScript.js"></script>
+</body>
+</html>
