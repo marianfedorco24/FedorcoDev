@@ -165,13 +165,12 @@ async function confirmFolderEdit () {
         eval(`${getCurrDirObjPath()}[currentItemIndex].icon = iconPath`);
     }
     else {
-        let url = editNameInput.value.trim();
+        let name = editNameInput.value.trim();
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-        url = "https://" + url;
+        url = "https://" + name;
         }
 
-
-        eval(`${getCurrDirObjPath()}[currentItemIndex].name = url`);
+        eval(`${getCurrDirObjPath()}[currentItemIndex].name = name`);
         eval(`${getCurrDirObjPath()}[currentItemIndex].link = editUrlInput.value.trim()`);
         eval(`${getCurrDirObjPath()}[currentItemIndex].icon = iconPath`);
     }
@@ -202,7 +201,6 @@ async function createNewFolder () {
         newFolderIconPickerCont.innerHTML = "";
     }
 }
-
 
 // function to create a new folder
 function showNewFolderWindow () {
