@@ -223,9 +223,9 @@ async function createNewLink () {
     if (newLinkNameInput.value.trim() !== "" && newLinkUrlInput.value.trim() !== "") {
         const iconPath = `icons/${document.querySelector(".toggledIcon").src.split("/").at(-1)}`;
 
-        let url = newLinkUrlInput.value.trim();
+        let name = newLinkUrlInput.value.trim();
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-        url = "https://" + url;
+        url = "https://" + name;
         }
 
         eval(getCurrDirObjPath()).push({
